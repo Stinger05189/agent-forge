@@ -33,12 +33,12 @@ When initialized, Agent Forge scaffolds four files into your project:
 You don't need to clone this repository or install any packages. To initialize Agent Forge in a new project, simply open your terminal at the root of your project and run:
 
 ```powershell
-irm [https://raw.githubusercontent.com/Stinger05189/agent-forge/main/init.ps1](https://raw.githubusercontent.com/Stinger05189/agent-forge/main/init.ps1) | iex
+irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" | iex
 ```
 
 This completely eliminates setup friction. No cloning, no profile tweaking, no path mapping. Just open a terminal, run the one-liner, and your AI memory bank is ready to go.
 
-***Note: If an `.agents/` directory already exists in the target, the script will prompt you before overwriting to protect your project's memory state.***
+**_Note: If an `.agents/` directory already exists in the target, the script will prompt you before overwriting to protect your project's memory state._**
 
 ---
 
@@ -48,11 +48,29 @@ Agent Forge operates on a strict "Session" lifecycle. You, the Lead Architect, d
 
 ### 1. Initialization (Context Loading)
 
-Start a new conversation in your LLM of choice (e.g., Gemini 1.5 Pro). Drop your target source files into the context window, along with the entire `.agents/` directory.
+Start a new conversation in your LLM of choice (e.g., Gemini). Drop your target source files into the context window, along with the entire `.agents/` directory.
 
-Provide your kickoff prompt:
+Copy and paste the following prompt, filling in your specific goal:
 
-> _"Review `agent.md` and acknowledge the handshake. [USER INPUT: SESSION GOAL] My goal is to: [Insert Goal Here]."_
+```markdown
+# [HANDSHAKE] Session Initialization
+
+**System Directive:**
+Review the `.agents/agent.md` file provided in this context window. Acknowledge the Master Protocol and the Execution Standards. Cross-reference the upcoming tasks with `.agents/conventions.md` and `.agents/plan.md`.
+
+### [USER INPUT: SESSION GOAL]
+
+> **My Focus Area / Task for this session is:**
+> [INSERT YOUR GOAL, THOUGHTS, CONCERNS, OR TARGET FILES HERE]
+
+**Action Required:**
+Do not write code yet. Proceed to **Phase 1: Initialization** by executing the following:
+
+1. **Synthesize Context:** Actively merge my stated goal with the existing project memory. Cross-reference `devlog.md` for past decisions, `conventions.md` for strict architectural rules, and `plan.md` for the active task queue.
+2. **Triangulate & Strategize:** Based on this synthesis, provide a breakdown of affected files, potential edge cases, and architectural impacts.
+3. **Propose Work Packets:** Outline a detailed execution plan batched into logical, comprehensive Work Packets.
+4. **Halt:** Await my exact reply of **`GREENLIGHT`** before generating any functional code.
+```
 
 ### 2. Phase 1: Triangulation & Strategy
 
@@ -65,17 +83,27 @@ The AI will begin executing the Work Packets. It will accumulate changes per-fil
 
 ### 4. Phase 3: The Teardown
 
-When the work is merged and the goal is met, type:
+When the work is merged and your goal for the day is met, you must trigger the memory-saving protocol.
 
-> **`[END SESSION]`**
+Copy and paste the following prompt:
 
-The AI will immediately halt development and draft updates. It will:
+```markdown
+# [END SESSION] Teardown Protocol
 
-1. Increment the Session ID and write a summary for `devlog.md`.
-2. Update checkboxes and queue the next tasks in `plan.md`.
-3. Add any newly discovered rules or fixes to `conventions.md`.
+**System Directive:**
+Halt all active development. We are concluding this session. Proceed immediately to **Phase 3: Teardown** as defined in the Master Protocol (`agent.md`).
 
-You review these drafts, and if they look good, you manually paste them into their respective files in your `.agents/` folder. The state is now saved for your next session.
+**Action Required:**
+Please generate the exact, formatted markdown snippets required to update our `.agents/` memory bank. Provide three distinct code blocks:
+
+1. **`devlog.md` Update:** A new Session Entry under the Active Epoch summarizing our focus, key architectural decisions, and resolved roadblocks. Increment the Session ID.
+2. **`plan.md` Update:** A refreshed task queue checking off what we finished, removing stale tasks, and promoting/defining the exact tasks for the _next_ session.
+3. **`conventions.md` Update:** (If applicable) Any new architectural rules, strict naming conventions, or specific 'Gotchas' we discovered today that should be permanently remembered.
+
+Ensure these blocks are formatted perfectly for me to directly copy and replace/append to their respective files.
+```
+
+You review these drafts, and if they look good, manually paste them into their respective files in your `.agents/` folder. The state is now perfectly preserved for tomorrow.
 
 ---
 
