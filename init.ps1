@@ -1,5 +1,5 @@
 # URL to the raw templates in your GitHub repo
-$RepoBase = "https://raw.githubusercontent.com/Stinger05189/agent-forge/main/template/.agents"
+$RepoBase = "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/template/.agents"
 $TargetDir = Join-Path (Get-Location).Path ".agents"
 
 # Check if .agents already exists to prevent accidental overwrites
