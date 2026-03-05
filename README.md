@@ -36,7 +36,7 @@ Agent Forge is built to be modular. You can clone this repository anywhere on yo
 
 ```powershell
 # 1. Clone this repository to your local machine (e.g., into your tools directory)
-git clone [https://github.com/yourusername/agent-forge.git](https://github.com/yourusername/agent-forge.git)
+git clone https://github.com/Stinger05189/agent-forge.git
 
 # 2. Run the installer script, pointing it to your target project directory
 .\agent-forge\install.ps1 -TargetDir "C:\path\to\your\target\project"
