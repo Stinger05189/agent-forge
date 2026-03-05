@@ -2,15 +2,17 @@ param (
     [string]$TargetDir = "."
 )
 
+# Resolve absolute path of the target directory
+$TargetDir = (Resolve-Path -Path $TargetDir).ProviderPath
+
 # Ensure target directory exists
 if (-not (Test-Path -Path $TargetDir)) {
     Write-Error "Error: Target directory '$TargetDir' does not exist."
     exit 1
 }
 
-# Define paths relative to where the script is located
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$TemplateDir = Join-Path $ScriptDir "template\.agents"
+# $PSScriptRoot reliably gets the directory where THIS script lives
+$TemplateDir = Join-Path $PSScriptRoot "template\.agents"
 $TargetAgentDir = Join-Path $TargetDir ".agents"
 
 # Check if .agents already exists in the target to prevent accidental overwrites
