@@ -28,4 +28,15 @@ foreach ($File in $Files) {
 
 Write-Host ""
 Write-Host "SUCCESS: Agent Forge initialized!" -ForegroundColor Green
-Write-Host "Drop the .agents/ directory into your AI context window and begin the Handshake."
+Write-Host "Drop the .agents/ directory into your AI context window to begin."
+Write-Host ""
+Write-Host "===========================================================" -ForegroundColor Cyan
+Write-Host " 📌 NEXT STEPS: Grab Your Workflow Prompts" -ForegroundColor Cyan
+Write-Host "===========================================================" -ForegroundColor Cyan
+Write-Host "To maintain the workflow, use the standardized session prompts."
+Write-Host "Ctrl+Click the links below to copy them to your prompt manager:"
+Write-Host ""
+Write-Host "🚀 Kickoff Prompt:  https://github.com/Stinger05189/agent-forge#1-initialization-context-loading"
+Write-Host "🛑 Teardown Prompt: https://github.com/Stinger05189/agent-forge#4-phase-3-the-teardown"
+Write-Host "===========================================================" -ForegroundColor Cyan
+Write-Host ""
