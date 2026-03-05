@@ -28,22 +28,17 @@ When initialized, Agent Forge scaffolds four files into your project:
 
 ---
 
-## Installation
+## Instant Installation (Windows PowerShell)
 
-Agent Forge is built to be modular. You can clone this repository anywhere on your machine and run the installer script to inject the workflow into any new or existing project.
-
-### Windows (PowerShell)
+You don't need to clone this repository or install any packages. To initialize Agent Forge in a new project, simply open your terminal at the root of your project and run:
 
 ```powershell
-# 1. Clone this repository to your local machine (e.g., into your tools directory)
-git clone https://github.com/Stinger05189/agent-forge.git
-
-# 2. Run the installer script, pointing it to your target project directory
-.\agent-forge\install.ps1 -TargetDir "C:\path\to\your\target\project"
-
+irm [https://raw.githubusercontent.com/Stinger05189/agent-forge/main/init.ps1](https://raw.githubusercontent.com/Stinger05189/agent-forge/main/init.ps1) | iex
 ```
 
-_Note: If an `.agents/` directory already exists in the target, the script will prompt you before overwriting to protect your project's memory state._
+This completely eliminates setup friction. No cloning, no profile tweaking, no path mapping. Just open a terminal, run the one-liner, and your AI memory bank is ready to go.
+
+***Note: If an `.agents/` directory already exists in the target, the script will prompt you before overwriting to protect your project's memory state.***
 
 ---
 
