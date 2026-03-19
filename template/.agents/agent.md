@@ -22,17 +22,20 @@ When generating code, your primary goal is to format the output so it aligns per
 - **When to use:** If the file is short (under ~50 lines), if you are creating a new file, or if the requested changes affect more than 80% of the file's logic.
 - **Standard:** Output the entire file from top to bottom. Do not use skip blocks.
 
-### B. Explicit Change Annotations (The Tombstone Rule)
+### B. Pre-Code Summaries & Structural Retention (The Ghost Rule)
 
-To prevent ambiguity between "skipped for brevity" and "intentionally removed," every code block provided must be explicitly tagged with its change state using language-appropriate comments:
+To prevent ambiguity and streamline manual merging, you must document additions and removals without cluttering the code with inline labels.
 
-- **`// [ADDED]:`** Place above entirely new functions, variables, or blocks.
-- **`// [MODIFIED]:`** Place above existing code that has been changed.
-- **`// [REMOVED: entityName]:`** (The Tombstone). Never silently omit code that needs to be deleted. Leave a tombstone marker in its exact structural place so the User knows to delete it from the source file.
+**1. The Pre-Code Summary:**
+Before outputting any code block, you must provide a concise markdown list of the specific structural elements (functions, classes, properties) that are being added or removed in that file.
+
+**2. The Ghost Rule (For Removed Code):**
+Never silently omit code that needs to be deleted. Instead of using tags, you must preserve the structural boundaries of the removed code (e.g., function signatures, class wrappers) but **comment out** the block. This provides an exact visual anchor in the diff tool so the User knows exactly what to delete.
+_Note: Do not add any special labels or comments to newly added or modified code._
 
 ### C. Surgical Edits & The Skip Taxonomy
 
-- **When to use:** For targeted changes, sparse edits, or modifications within large files. You MUST elide unchanged code to save tokens, but you must do so using precise structural anchors and the Explicit Change Annotations.
+- **When to use:** For targeted changes, sparse edits, or modifications within large files. You MUST elide unchanged code to save tokens, but you must do so using precise structural anchors.
 
 **1. Top / Bottom Truncation:**
 Use this to skip massive sections at the beginning or end of a file.
@@ -40,51 +43,53 @@ Use this to skip massive sections at the beginning or end of a file.
 ```typescript
 // ... [Skipped: Imports and setup] ...
 
-// [MODIFIED]
 export function myTargetFunction() {
-  // [Modified logic here]
+  // Modified logic here
 }
 
 // ... [Skipped: Remaining file] ...
 ```
 
-**2. Block-Level Skips (Functions/Classes):**
-When skipping entire sibling functions, preserve their signatures or boundaries so the diff tool maintains the structural map.
+**2. Block-Level Skips & Removals:**
+When skipping entire sibling functions, preserve their signatures or boundaries so the diff tool maintains the structural map. When removing a function, comment it out entirely.
 
 ```typescript
 function unchangedFunctionA() {
   // ... [Skipped: unchangedFunctionA logic] ...
 }
 
-// [REMOVED: obsoleteFunctionToBeDeleted()]
+/* function obsoleteFunctionToBeDeleted() {
+  // Old logic commented out to indicate removal
+}
+*/
 
-// [ADDED]
 function newlyAddedFunction() {
-  // [New logic here]
+  // New logic here
 }
 
-// [MODIFIED]
 function modifiedFunctionB() {
-  // [Modified logic here]
+  // Modified logic here
 }
 ```
 
 **3. Component/UI Skips (JSX/HTML):**
-When modifying deeply nested UI structures, preserve the outer wrapper tags and use language-appropriate comment markers for skipped blocks and change annotations.
+When modifying deeply nested UI structures, preserve the outer wrapper tags and use language-appropriate comment markers for skipped blocks and removed blocks.
 
 ```tsx
 <div className="flex-1 w-full relative">
   {/* ... [Skipped HTML Section: Sidebar Navigation] ... */}
 
-  {/* [REMOVED: Old Banner Component] */}
+  {/* <div className="old-banner">
+    <p>This entire component is commented out to indicate removal.</p>
+  </div>
+  */}
 
-  {/* [MODIFIED] */}
-  <main className="modified-content-area">{/* [Modified logic here] */}</main>
+  <main className="modified-content-area">{/* Modified logic here */}</main>
 </div>
 ```
 
 **4. Sparse/Inline Edits (The 3-Line Anchor Rule):**
-For tiny modifications deep inside a complex block, you must include exactly three lines of unchanged code immediately before and after the modification. Keep exact indentation.
+For tiny modifications deep inside a complex block, you must include exactly three lines of unchanged code immediately before and after the modification. Keep exact indentation. Do not label the modification.
 
 ```typescript
 // ... [Skipped: N lines] ...
@@ -92,7 +97,6 @@ For tiny modifications deep inside a complex block, you must include exactly thr
     const y = calculateY();
     const matrix = getTransform();
 
-    // [MODIFIED]
     const updatedMatrix = applyOffset(matrix);
 
     return { x, y, updatedMatrix };
@@ -103,7 +107,7 @@ For tiny modifications deep inside a complex block, you must include exactly thr
 
 ### D. Zero Noise Policy
 
-- No conversational filler, pleasantries, or meta-commentary inside or around the code blocks. Output only the requested code and the necessary markdown wrappers.
+- No conversational filler, pleasantries, or meta-commentary inside or around the code blocks. Output only the requested pre-code summary, the code itself, and the necessary markdown wrappers.
 
 ## 4. The Session Lifecycle
 
@@ -124,7 +128,7 @@ Once greenlit, work through the Work Packets. You must optimize for efficient ma
 
 - **File Accumulation:** Group all required changes for a single file into one comprehensive code block per response. Never output multiple, fragmented edits for the same file in a single conversational turn.
 - **Maximize Turn Volume:** Push for large, substantive code completions rather than small, piecemeal edits. Complete as many Work Packets as possible in a single response, provided the length and complexity remain manageable and logically grouped.
-- **Provide & Pause:** Output the formatted code blocks according to the Execution Standards, then halt. Await the User's diff confirmation, feedback, or the prompt to continue to the next batch of Work Packets.
+- **Provide & Pause:** Output the pre-code summary and formatted code blocks according to the Execution Standards, then halt. Await the User's diff confirmation, feedback, or the prompt to continue to the next batch of Work Packets.
 
 ### Phase 3: Teardown (Triggered by "[END SESSION]")
 
