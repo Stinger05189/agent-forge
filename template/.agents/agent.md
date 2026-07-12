@@ -30,7 +30,7 @@ To prevent ambiguity and streamline manual merging, you must document additions 
 Before outputting any code or text block, you must provide a concise markdown list of the specific structural elements (functions, classes, properties, or document sections) that are being added or removed in that file.
 
 **2. The Ghost Rule (For Removed Content):**
-Never silently omit code or documentation that needs to be deleted. Instead of using tags, you must preserve the structural boundaries of the removed content (e.g., function signatures, class wrappers, or markdown headers) but **comment out** the block (using code comments or HTML `` comments for markdown). This provides an exact visual anchor in the diff tool so the User knows exactly what to delete.
+Never silently omit code or documentation that needs to be deleted. Instead of using tags, you must preserve the structural boundaries of the removed content (e.g., function signatures, class wrappers, or markdown headers) but **comment out** the block (using code comments or HTML `<!-- -->` comments for markdown). This provides an exact visual anchor in the diff tool so the User knows exactly what to delete.
 _Note: Do not add any special labels or comments to newly added or modified content._
 
 ### C. Surgical Edits & The Skip Taxonomy
@@ -44,7 +44,7 @@ Use this to skip massive sections at the beginning or end of a file.
 // ... [Skipped: Imports and setup] ...
 
 export function myTargetFunction() {
-  // Modified logic here
+	// Modified logic here
 }
 
 // ... [Skipped: Remaining file] ...
@@ -55,7 +55,7 @@ When skipping entire sibling functions or document sections, preserve their boun
 
 ```typescript
 function unchangedFunctionA() {
-  // ... [Skipped: unchangedFunctionA logic] ...
+	// ... [Skipped: unchangedFunctionA logic] ...
 }
 
 /* function obsoleteFunctionToBeDeleted() {
@@ -64,11 +64,11 @@ function unchangedFunctionA() {
 */
 
 function newlyAddedFunction() {
-  // New logic here
+	// New logic here
 }
 
 function modifiedFunctionB() {
-  // Modified logic here
+	// Modified logic here
 }
 ```
 
@@ -77,14 +77,14 @@ When modifying deeply nested structures, preserve the outer wrapper tags and use
 
 ```tsx
 <div className="flex-1 w-full relative">
-  {/* ... [Skipped HTML Section: Sidebar Navigation] ... */}
+	{/* ... [Skipped HTML Section: Sidebar Navigation] ... */}
 
-  {/* <div className="old-banner">
+	{/* <div className="old-banner">
     <p>This entire component is commented out to indicate removal.</p>
   </div>
   */}
 
-  <main className="modified-content-area">{/* Modified logic here */}</main>
+	<main className="modified-content-area">{/* Modified logic here */}</main>
 </div>
 ```
 
@@ -108,6 +108,14 @@ For tiny modifications deep inside a complex block, you must include exactly thr
 ### D. Zero Noise Policy
 
 - No conversational filler, pleasantries, or meta-commentary inside or around the code or text blocks. Output only the requested pre-output summary, the content itself, and the necessary markdown wrappers.
+
+### E. Code Formatting & Context Retention
+
+To maintain a readable and historically contextualized codebase, you must strictly adhere to the following formatting rules during all code generation:
+
+- **1. Indentation (Tabs, Not Spaces):** You must use **tabs** for all code indentation. Never use spaces for indentation, regardless of the language (C++, C#, TypeScript, etc.).
+- **2. Structural Comment Sectioning:** Organize code logically using clear, full-line comment dividers to separate distinct architectural components (e.g., Variable Declarations, Lifecycle Methods, Utility Functions, Modifier Logic).
+- **3. Strict Comment Preservation (The Context Rule):** Never delete or truncate existing inline comments, architectural headers, or warning notes when iterating on code. If a piece of code is refactored, the comments explaining _why_ the original code existed, the challenges faced during initial implementation, or the edge cases it handles must be preserved or accurately updated—never silently discarded. Future developers (and future AI context windows) rely on this embedded history to understand the "why" behind the code and prevent regressions. If you modify logic, you must maintain the historical context of that logic.
 
 ## 4. The Session Lifecycle
 
