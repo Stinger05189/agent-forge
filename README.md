@@ -33,22 +33,22 @@ When initialized, Agent Forge scaffolds four files into your project:
 
 ## 🚀 Instant Installation (Windows PowerShell)
 
-Initialize Agent Forge in any project root with a single PowerShell command:
+Initialize Agent Forge in any project root with an interactive prompt:
 
 ```powershell
 irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" | iex
 ```
 
-### Profile Selection
+### Direct Profile Selection (Non-Interactive)
 
-The initializer will prompt you to choose a workspace profile, or you can pass it directly via parameter:
+To bypass the interactive prompt and specify the profile directly:
 
 ```powershell
 # Standard Profile (General Web, Backend, Systems, Mobile)
-& { irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" } -Profile Standard
+& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1"))) -WorkspaceProfile Standard
 
 # Unreal Engine Profile (C++20, Slate, UMG, LWC, GC Roots, Engine Macros)
-& { irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" } -Profile Unreal
+& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1"))) -WorkspaceProfile Unreal
 ```
 
 ---

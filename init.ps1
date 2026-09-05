@@ -1,15 +1,15 @@
 # agent-forge/init.ps1
 param (
 	[Parameter(Mandatory=$false)]
-	[ValidateSet("Standard", "Unreal")]
-	[string]$Profile = ""
+	[ValidateSet("Standard", "Unreal", "")]
+	[string]$WorkspaceProfile = ""
 )
 
 $RepoBase = "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/template/.agents"
 $TargetDir = Join-Path (Get-Location).Path ".agents"
 
 # Resolve profile selection if not provided via parameter
-if ([string]::IsNullOrWhiteSpace($Profile)) {
+if ([string]::IsNullOrWhiteSpace($WorkspaceProfile)) {
 	Write-Host ""
 	Write-Host "===========================================================" -ForegroundColor Cyan
 	Write-Host " ⚒️  AGENT FORGE WORKSPACE INITIALIZER" -ForegroundColor Cyan
@@ -19,9 +19,9 @@ if ([string]::IsNullOrWhiteSpace($Profile)) {
 	Write-Host "  [2] Unreal Engine (C++20, Slate, UMG, LWC, GC Safety)"
 	$selection = Read-Host "Enter choice [1-2] (Default: 1)"
 	if ($selection -eq "2") {
-		$Profile = "Unreal"
+		$WorkspaceProfile = "Unreal"
 	} else {
-		$Profile = "Standard"
+		$WorkspaceProfile = "Standard"
 	}
 }
 
@@ -37,11 +37,11 @@ if (Test-Path $TargetDir) {
 	New-Item -ItemType Directory -Path $TargetDir | Out-Null
 }
 
-$AgentFileName = if ($Profile -eq "Unreal") { "agent.unreal.md" } else { "agent.md" }
+$AgentFileName = if ($WorkspaceProfile -eq "Unreal") { "agent.unreal.md" } else { "agent.md" }
 $BaseFiles = @("plan.md", "devlog.md", "conventions.md")
 
 Write-Host ""
-Write-Host "Forging Agent Forge workspace ($Profile Profile)..." -ForegroundColor Cyan
+Write-Host "Forging Agent Forge workspace ($WorkspaceProfile Profile)..." -ForegroundColor Cyan
 
 # Download the appropriate agent protocol and save as agent.md
 $AgentUrl = "$RepoBase/$AgentFileName"
@@ -58,7 +58,7 @@ foreach ($File in $BaseFiles) {
 }
 
 Write-Host ""
-Write-Host "SUCCESS: Agent Forge initialized ($Profile Profile)!" -ForegroundColor Green
+Write-Host "SUCCESS: Agent Forge initialized ($WorkspaceProfile Profile)!" -ForegroundColor Green
 Write-Host "Drop the .agents/ directory into your AI context window to begin."
 Write-Host ""
 Write-Host "===========================================================" -ForegroundColor Cyan
