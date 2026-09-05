@@ -1,3 +1,5 @@
+// agent-forge/template/.agents/devlog.md
+
 # Project Dev Log & Core Memory
 
 > **[IMMUTABLE AI DIRECTIVE]**
@@ -8,7 +10,8 @@
 >
 > 1. **Session Incrementation:** Never use dates. Increment the Session ID sequentially (e.g., Session 001, Session 002) for every new `[END SESSION]` teardown.
 > 2. **Teardown Protocol:** At the end of a session, append a new Session Entry under the Active Epoch. Keep it dense, technical, and focused on _decisions_ and _roadblocks_ rather than granular code steps.
-> 3. **Epoch Archiving:** When the User declares a major milestone complete, summarize the previous Epoch's sessions into a dense, 3-4 sentence paragraph to save token context, then begin a new Epoch.
+> 3. **Milestone Compression Cadence:** Periodically compress past completed sessions into dense Epoch summaries at clear milestones (e.g., every 3–4 sessions or when wrapping an architectural milestone). Retain only the most recent 1–2 active sessions in granular detail to prevent token bloat while keeping operational memory sharp.
+> 4. **Epoch Archiving:** When the User declares a major milestone complete, summarize the previous Epoch's sessions into a dense, 3-4 sentence paragraph to save token context, then begin a new Epoch.
 
 ---
 

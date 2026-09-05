@@ -1,8 +1,8 @@
 # Agent Forge ⚒️
 
-A standardized, hybrid human-AI developer workflow engine.
+A standardized, hybrid human-AI developer workflow engine optimized for high-throughput AI models, manual diff verification, and automated batch code extraction tools.
 
-Agent Forge is designed for developers and systems architects who prefer **manual code implementation and diff-checking** in their IDE (like VS Code or JetBrains Rider), while utilizing AI (like Google Gemini) as a persistent, state-aware Assistant Architect.
+Agent Forge is designed for developers and systems architects who prefer **manual code review and diff verification** in their IDE (like VS Code or JetBrains Rider) or dedicated batch code extraction GUI applications, while utilizing frontier AI models as persistent, state-aware Assistant Architects.
 
 Instead of relying on pasting massive prompts or fighting AI hallucinations as a project scales, this workflow injects a dedicated, machine-readable `.agents/` directory into your project root. This acts as the AI's core memory bank, providing strict architectural constraints, execution standards, and session-based dev logs.
 
@@ -10,12 +10,13 @@ Instead of relying on pasting massive prompts or fighting AI hallucinations as a
 
 ## 🌟 The Value Proposition
 
-Standard AI coding assistants often suffer from context drift, hallucinated frameworks, and destructive file-overwrite behavior. Agent Forge solves this by enforcing:
+Modern frontier models can output thousands of lines of code across dozens of files in a single pass. Agent Forge channels this raw throughput into a predictable, robust development pipeline:
 
-1. **The Diff-Ready Standard:** The AI is strictly instructed on a "Skip Taxonomy" (using anchors like `// ... [Skipped: N lines] ...`). It outputs surgical, token-efficient code blocks designed to align perfectly in IDE diff/merge tools.
-2. **Session-Based Memory:** Work is compartmentalized into "Sessions" and "Epochs". The AI maintains its own `devlog.md` and `plan.md` to remember what it did yesterday and what needs to happen today.
-3. **Immutable Architecture:** A living `conventions.md` file tracks project-specific rules, preventing the AI from forgetting the tech stack, naming conventions, or solved bugs.
-4. **Zero-Noise Execution:** The AI is trained to eliminate conversational filler and only output the strategy, the code, and the teardown summaries.
+1. **Tooling & Batch-Export Ready:** Code blocks are formatted for seamless parsing by automated batch code extractors. Line 1 inside every code block strictly specifies the commented relative file path. Zero synthetic instructional comments are injected inside code, ensuring code is immediately pasteable and compilable without manual cleanup.
+2. **Work Packet Pre-Code Summaries:** Summaries of intent, file changes, and structural additions/removals are consolidated before code blocks execute. Zero conversational chatter or interstitial commentary is permitted between code blocks.
+3. **Natural Structural Anchors:** Partial file splices and additions utilize natural surrounding code syntax (enclosing class lines, access specifiers, and adjacent functions) rather than artificial comment tags, ensuring perfect alignment in diff tools.
+4. **Milestone-Driven Core Memory:** The workflow enforces a periodic compression cadence on `devlog.md`. Historical sessions are compressed into dense Epoch milestones, preserving technical rationale while preventing token bloat.
+5. **Specialized Engine Profiles:** Out-of-the-box support for both general software development and dedicated game engine workflows (e.g., Unreal Engine C++20, Slate, UMG, LWC, and GC rooting).
 
 ---
 
@@ -23,36 +24,42 @@ Standard AI coding assistants often suffer from context drift, hallucinated fram
 
 When initialized, Agent Forge scaffolds four files into your project:
 
-* 📄 **`agent.md` (The Master Protocol):** The immutable glue of the workflow. It defines the AI's role, the diff-ready execution standards, and the strict Session Lifecycle protocol. **(Never modified by the AI).**
-* 📄 **`plan.md` (The Short-Term Engine):** The immediate, actionable queue. It tracks Active and Pending "Work Packets" and flags external blockers. **(Updated by the AI at the end of every session).**
-* 📄 **`devlog.md` (The Core Memory):** The historical ledger. Organized sequentially by Epochs and Session IDs (never dates). It tracks key architectural decisions and resolved roadblocks. **(Appended by the AI at the end of every session).**
-* 📄 **`conventions.md` (The Brain):** The living rulebook. It stores the tech stack, separation of concerns, naming conventions, and repeated "Gotchas" specific to the current codebase. **(Expanded by the AI as new patterns emerge).**
+- 📄 **`agent.md` (The Master Protocol):** The immutable glue of the workflow. Defines roles, execution standards, batch generation rules, and the Session Lifecycle protocol. Available in **Standard** and **Unreal Engine** profiles. **(Never modified by the AI).**
+- 📄 **`plan.md` (The Short-Term Engine):** The immediate, actionable queue. Tracks Active and Pending Work Packets and flags external blockers. **(Updated by the AI at teardown).**
+- 📄 **`devlog.md` (The Core Memory):** The historical ledger. Organized sequentially by Epochs and Session IDs (never calendar dates). Periodically compressed at milestones to retain maximum operational context. **(Appended by the AI at teardown).**
+- 📄 **`conventions.md` (The Brain):** The living rulebook. Stores the tech stack, separation of concerns, naming conventions, and repeated gotchas specific to the codebase. **(Expanded by the AI as new patterns emerge).**
 
 ---
 
 ## 🚀 Instant Installation (Windows PowerShell)
 
-You don't need to clone this repository or install any packages. To initialize Agent Forge in a new project, simply open your terminal at the root of your project and run:
+Initialize Agent Forge in any project root with a single PowerShell command:
 
 ```powershell
 irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" | iex
 ```
 
-This completely eliminates setup friction. No cloning, no profile tweaking, no path mapping. Just open a terminal, run the one-liner, and your AI memory bank is ready to go.
+### Profile Selection
 
-> **Note:** If an `.agents/` directory already exists in the target, the script will prompt you before overwriting to protect your project's memory state.
+The initializer will prompt you to choose a workspace profile, or you can pass it directly via parameter:
+
+```powershell
+# Standard Profile (General Web, Backend, Systems, Mobile)
+& { irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" } -Profile Standard
+
+# Unreal Engine Profile (C++20, Slate, UMG, LWC, GC Roots, Engine Macros)
+& { irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1" } -Profile Unreal
+```
 
 ---
 
 ## 🔄 The Workflow Loop
 
-Agent Forge operates on a strict "Session" lifecycle. You, the Lead Architect, drive the overarching phases, while the AI executes the micro-level implementations.
-
 ### 1. Initialization (Context Loading)
 
-Start a new conversation in your LLM of choice (e.g., Gemini). Drop your target source files into the context window, along with the entire `.agents/` directory.
+Start a new conversation in your LLM of choice. Drop your target source files into the context window along with the entire `.agents/` directory.
 
-Copy and paste the following prompt, filling in your specific goal:
+Copy and paste the Kickoff Prompt:
 
 ```markdown
 # [HANDSHAKE] Session Initialization
@@ -61,31 +68,32 @@ Copy and paste the following prompt, filling in your specific goal:
 Review the `.agents/agent.md` file provided in this context window. Acknowledge the Master Protocol and the Execution Standards. Cross-reference the upcoming tasks with `.agents/conventions.md` and `.agents/plan.md`.
 
 ### [USER INPUT: SESSION GOAL]
+
 > **My Focus Area / Task for this session is:**
 > [INSERT YOUR GOAL, THOUGHTS, CONCERNS, OR TARGET FILES HERE]
 
 **Action Required:**
 Do not write code yet. Proceed to **Phase 1: Initialization** by executing the following:
+
 1. **Synthesize Context:** Actively merge my stated goal with the existing project memory. Cross-reference `devlog.md` for past decisions, `conventions.md` for strict architectural rules, and `plan.md` for the active task queue.
 2. **Triangulate & Strategize:** Based on this synthesis, provide a breakdown of affected files, potential edge cases, and architectural impacts.
-3. **Propose Work Packets:** Outline a detailed execution plan batched into logical, comprehensive Work Packets.
+3. **Propose Work Packets & Declare Batch:** Outline a detailed execution plan batched into logical Work Packets. Explicitly declare your intent to execute all packets in one go.
 4. **Halt:** Await my exact reply of **`GREENLIGHT`** before generating any functional code.
 ```
 
 ### 2. Phase 1: Triangulation & Strategy
 
-The AI will **not** write code yet. It will cross-reference your goal against `conventions.md` and `plan.md`, then output a strategy broken down into isolated "Work Packets."
+The AI will synthesize your goal against memory, triangulate edge cases, propose comprehensive Work Packets, and halt for approval.
 
-### 3. Phase 2: Iteration
+### 3. Phase 2: High-Throughput Execution
 
-Reply with the exact phrase: **`GREENLIGHT`**. 
-The AI will begin executing the Work Packets. It will accumulate changes per-file to maximize turn volume and output diff-ready code blocks using strict structural anchors. You manually merge these blocks in your IDE using your diff tool.
+Reply with: `GREENLIGHT`
+
+The AI executes the declared Work Packets sequentially. Each packet provides a single Pre-Code Summary followed immediately by back-to-back code blocks with line 1 file paths and natural context anchors. Your automated batch tools or diff viewer import the code cleanly with zero comment-cleanup required.
 
 ### 4. Phase 3: The Teardown
 
-When the work is merged and your goal for the day is met, you must trigger the memory-saving protocol. 
-
-Copy and paste the following prompt:
+When your goal is met, trigger the memory consolidation protocol:
 
 ```markdown
 # [END SESSION] Teardown Protocol
@@ -94,20 +102,9 @@ Copy and paste the following prompt:
 Halt all active development. We are concluding this session. Proceed immediately to **Phase 3: Teardown** as defined in the Master Protocol (`agent.md`).
 
 **Action Required:**
-Please generate the exact, formatted markdown snippets required to update our `.agents/` memory bank. Provide three distinct code blocks:
-1. **`devlog.md` Update:** A new Session Entry under the Active Epoch summarizing our focus, key architectural decisions, and resolved roadblocks. Increment the Session ID.
-2. **`plan.md` Update:** A refreshed task queue checking off what we finished, removing stale tasks, and promoting/defining the exact tasks for the *next* session.
-3. **`conventions.md` Update:** (If applicable) Any new architectural rules, strict naming conventions, or specific 'Gotchas' we discovered today that should be permanently remembered.
+Please generate the exact, formatted markdown snippets required to update our `.agents/` memory bank:
 
-Ensure these blocks are formatted perfectly for me to directly copy and replace/append to their respective files.
+1. **`devlog.md` Update:** A new Session Entry under the Active Epoch summarizing our focus, key architectural decisions, and resolved roadblocks. Apply milestone compression to older completed sessions if applicable. Increment the Session ID.
+2. **`plan.md` Update:** A refreshed task queue checking off completed items, removing stale tasks, and defining the actionable queue for the next session.
+3. **`conventions.md` Update:** (If applicable) Any new architectural patterns, conventions, or gotchas discovered today.
 ```
-
-You review these drafts, and if they look good, manually paste them into their respective files in your `.agents/` folder. The state is now perfectly preserved for tomorrow.
-
----
-
-## 🛠️ Maintenance & Best Practices
-
-* **Keep `agent.md` clean:** Do not put project-specific code in `agent.md`. If you change tech stacks, update `conventions.md`.
-* **Compress Epochs:** As `devlog.md` grows massive over months of development, manually summarize older Epochs into short paragraphs to save AI token context limits.
-* **Trust the Diff Tool:** If the AI fails to provide the required 3 lines of unchanged structural context for a sparse edit, correct its behavior immediately before copying the code.
