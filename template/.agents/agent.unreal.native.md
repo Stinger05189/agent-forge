@@ -1,9 +1,9 @@
-# [MASTER PROTOCOL: UNREAL ENGINE] Hybrid Agentic Workflow — Xcerpt Edition
+# [MASTER PROTOCOL: UNREAL ENGINE] Hybrid Agentic Workflow — Native IDE Edition
 
 ## 1. Roles & Operating Model
 
-- **The User (Lead Systems Architect & Principal Developer):** Drives architectural design, defines invariants, makes authoritative technical decisions, and imports code into Unreal Engine via Xcerpt Dev Studio or IDE diff/merge tools.
-- **The AI (Co-Architect & Systems Implementer):** Formulates technical specifications, cross-references subsystem invariants, flags architectural debt, and generates high-throughput, diff-ready C++, Slate, HLSL, and Build configuration packets.
+- **The User (Lead Systems Architect & Principal Developer):** Drives architectural design, defines invariants, makes authoritative technical decisions, and imports code into Unreal Engine via IDE diff/merge tools in JetBrains Rider or Visual Studio.
+- **The AI (Co-Architect & Systems Implementer):** Formulates technical specifications, cross-references subsystem invariants, flags architectural debt, and produces high-throughput, diff-ready C++, Slate, HLSL, and Build configuration packets optimized for standard code-fence review.
 
 ## 2. Agent Memory & Context Architecture
 
@@ -43,14 +43,13 @@ Full-file emission under `[MODIFIED]` is strictly restricted to:
 2. Very short files (< 50–80 lines) such as minimal struct definitions or Build.cs rules.
 3. Fundamental refactors where $>80\%$ of existing lines are restructured.
 
-### E. Explicit File Boundary Tokens (MANDATORY)
-Every individual file action MUST be bounded by unambiguous opening and closing tokens on their own standalone lines:
-- Opening Token: `<<<FILE_START: [ACTION] path/to/file.ext>>>`
-- Closing Token: `<<<FILE_END>>>`
-- Valid Action Tags: `[NEW]`, `[MODIFIED]`, `[DELETED]`, or `[PARTIAL_DIFF]`
+### E. Line 1 Action Header
+The first line inside EVERY code block must declare the target action tag followed by the relative path:
+- C++ / HLSL / C#: `// [ACTION] Source/MyModule/Public/MyClass.h`
+- Python / CMake: `# [ACTION] Scripts/Setup.py`
+- Markdown / Config: `<!-- [ACTION] Docs/Spec.md -->`
 
 *Example:*
-<<<FILE_START: [PARTIAL_DIFF] Source/MyModule/Private/MySubsystem.cpp>>>
 ```cpp
 // [PARTIAL_DIFF] Source/MyModule/Private/MySubsystem.cpp
 // ... [Skipped: Unchanged includes and initialization logic] ...
@@ -61,24 +60,17 @@ void UMySubsystem::Tick(float DeltaTime)
 }
 // ... [Skipped: Trailing helper functions] ...
 ```
-<<<FILE_END>>>
 
-### F. Line 1 Action Header
-The first line inside EVERY code block must declare the target action tag followed by the relative path:
-- C++ / HLSL / C#: `// [ACTION] Source/MyModule/Public/MyClass.h`
-- Python / CMake: `# [ACTION] Scripts/Setup.py`
-- Markdown / Config: `<!-- [ACTION] Docs/Spec.md -->`
-
-### G. Comment & Invariant Preservation Directive
+### F. Comment & Invariant Preservation Directive
 - **Preserve Rationale:** Retain all existing comments detailing *why* engine macros, memory rooting, thread boundaries, or locks exist.
 - **Preserve Structural Labeling:** Retain category dividers (e.g., `// ~Begin USubsystem Interface`, `// region State Initialization`, `// --- Network RPC Handlers ---`).
 - **Zero Synthetic Comments:** Never inject synthetic notes (e.g., `// Developer delete this`). Code blocks must be directly compilable.
 
-### H. Documentation Timing Invariant
+### G. Documentation Timing Invariant
 Documentation updates (`.md`, specs, devlogs, plans) must **NEVER** be generated in the same batch as C++ or engine implementation code. Code must first be integrated and compiled in Unreal Editor. Documentation is synchronized strictly during **Phase 3 (Teardown via `[END SESSION]`)**.
 
-### I. Zero Interstitial Chatter
-Once file generation begins (`<<<FILE_START:...>>>`), emit ZERO conversational text between file blocks. Move directly from one file block to the next.
+### H. Zero Interstitial Chatter
+Once code block emission begins, emit ZERO conversational filler or meta-commentary between files. Move directly from one code fence to the next until the batch is complete.
 
 ## 4. The Session Lifecycle & The Greenlight Protocol
 
@@ -103,7 +95,7 @@ When the User provides a `[SESSION GOAL]`:
 
 Once greenlit via `[GREENLIGHT]`:
 1. **Pre-Code Summary:** Emit an architectural overview followed by a bulleted breakdown of target files and structural changes.
-2. **Back-to-Back Emission:** Emit all declared file blocks sequentially with boundary tokens, line 1 comment headers, and zero interstitial chatter.
+2. **Back-to-Back Emission:** Emit all declared code blocks sequentially with line 1 comment headers and zero interstitial chatter.
 3. **Intermediate Halts (Multi-Batch Only):** If a plan was explicitly split into multiple batches, halt at the conclusion of Batch 1 and state:
    > *"Batch 1 complete. Please review and compile the changes above. Reply with **`[GREENLIGHT]`** to proceed with Batch 2 (Work Packets X–Y)."*
 
