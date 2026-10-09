@@ -40,6 +40,11 @@ Instead of pasting massive prompts or fighting AI hallucinations as a project sc
 - **Xcerpt-Optimized Mode:** Emits deterministic boundary tokens (`<<<FILE_START: [ACTION] path>>>` / `<<<FILE_END>>>`), line 1 comment headers, and 4-backtick markdown wrappers for 1-click batch ingestion into Xcerpt Dev Studio.
 - **Native IDE Mode:** Emits clean, standard markdown code fences with line 1 comment path headers, optimized for manual review in VS Code, JetBrains, or Visual Studio merge tools.
 
+### 6. Workspace Profiles
+- **Standard Software Engineering:** TypeScript, Python, Rust, Go, C#, web/cloud backends.
+- **Unreal Engine:** C++20, Slate, UMG, LWC, GC Roots, Engine Macros, Tabs indentation.
+- **Source Miner & Repo Archaeology:** Deep reverse-engineering of open-source repositories, whitepapers, and tech talks. Distills code into a structured `vault/` of Tier 2 Subsystem Specs, Tier 3 Composable Primitives, and Forensic Triangulation Audits.
+
 > **Tooling Note:** [Xcerpt Dev Studio](https://github.com/Stinger05189/xcerpt-app) is a free and open-source desktop tool designed for batch context exporting, deterministic boundary extraction, and 1-click code ingestion.
 
 ---
@@ -79,6 +84,9 @@ To bypass interactive prompts and specify your configuration directly:
 
 # Unreal Engine 5 for Native IDE Merge (Rider / Visual Studio)
 & ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1"))) -WorkspaceProfile Unreal -ToolingMode NativeIDE
+
+# Source Miner & Repo Archaeology (Deep Extraction, Vault Specs, Xcerpt Mode)
+& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Stinger05189/agent-forge/master/init.ps1"))) -WorkspaceProfile SourceMiner
 ```
 
 ---
